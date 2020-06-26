@@ -38,10 +38,22 @@ mkdir -p /usr/local/var/db/redis
 echo "Install Redis"
 sudo make install
 
+
+# Install phpredis via PECL.
+yes '' | sudo pecl install redis || exit 1
+
+# Create redis.ini files for each version of PHP.
+for DIR in /etc/php/*/mods-available; do
+    echo "extension=redis.so" | sudo tee "$DIR/redis.ini" > /dev/null
+done
+
 cd utils
 
 echo "Starting Redis server"
 sudo ./install_server.sh
+
+# Enable the Redis PHP module.
+sudo phpenmod redis
 
 redis-cli ping
 if [ $? -eq 0 ]; then

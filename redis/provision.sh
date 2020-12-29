@@ -19,6 +19,8 @@ then
   apt-get --assume-yes install tcl;
 fi
 
+sudo apt-get install -y pkg-config
+
 echo "Getting latest Redis release"
 # Check if latest redis is downloaded, if not, download it
 if [ ! -f redis-stable.tar.gz ]; then
@@ -26,12 +28,11 @@ if [ ! -f redis-stable.tar.gz ]; then
   tar xvzf redis-stable.tar.gz && cd redis-stable
 fi
 # Check before executing make if it's already installed
-cd redis-stable
 make
 make test
 
 echo "Setting up default config at /usr/local/etc/redis.conf"
-cp /usr/local/etc/redis.conf.default /usr/local/etc/redis.conf
+sudo cp /home/vagrant/redis-stable/redis.conf /usr/local/etc/redis.conf
 
 mkdir -p /usr/local/var/db/redis
 
